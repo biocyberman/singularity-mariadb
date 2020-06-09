@@ -1,0 +1,16 @@
+version: "1.0"
+instances:
+  mariadb:
+    # image: docker://mariadb:10.5.3-bionic
+    build:
+      context: ./mariadb
+      recipe: mariadb.Singularity
+      options:
+        - fakeroot
+    volumes:
+      - /srv/rbd/covid19/bisystem/mysqldata/tmp:/tmp
+      - /srv/rbd/covid19/bisystem/mysqldata/db:/var/lib/mysql
+      - ./env_file.sh:/.singularity.d/env/env_file.sh
+    post:
+      command:  "mysqld_safe --datadir=/var/lib/mysql &"
+  
